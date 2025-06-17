@@ -1,0 +1,6 @@
+WORKSPACE_NAME: "argilla"
+DATASET_NAME: "toy_data"
+DATASET_PATH: "./data/toy_data.json"
+GUIDELINES_PATH: "./data/guidelines.md"
+NUM_USERS: 3
+OUTPUT_DIR: "./output"
