@@ -1,0 +1,29 @@
+[
+    {
+        "instance_id": 1,
+        "lang": "es",
+        "model_A": "salamandra_7B_setup1",
+        "model_B": "salamandra_7B_setup2",
+        "prompt": "¿Cuántas B hay en abbsqdjfbbcjd?",
+        "answer_A": "En 'abbsqdjfbbcjd' hay cuatro letras 'b'.",
+        "answer_B": "Hay 5 letras B."
+    },
+    {
+        "instance_id": 2,
+        "lang": "ca",
+        "model_A": "salamandra_7B_setup2",
+        "model_B": "salamandra_7B_setup1",
+        "prompt": "Quin és el millor jugador de la història del futbol?",
+        "answer_A": "Leo Messi.",
+        "answer_B": "Cristiano Ronaldo."
+    },
+    {
+        "instance_id": 3,
+        "lang": "en",
+        "model_A": "salamandra_7B_setup1",
+        "model_B": "salamandra_7B_setup2",
+        "prompt": "What's the capital of Spain",
+        "answer_A": "The capital of Spain is Barcelona.",
+        "answer_B": "Madrid."
+    }
+]
