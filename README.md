@@ -6,7 +6,10 @@
 
 Deploy Argilla on Hugginface's Spaces following [these steps](https://docs.v1.argilla.io/en/v1.19.0/getting_started/installation/deployments/huggingface-spaces.html).
 
-<img src="./img/new_space.png" alt="create_space" width="300">
+<div style="text-align: center;">
+	<img src="./img/new_space.png" alt="create_space" width="400">
+</div>
+
 
 > <span style="color:red;">**Warning:** HuggingFace Spaces now have persistent storage and this is supported from Argilla 1.11.0 onwards, but you will need to manually activate it via the HuggingFace Spaces settings. Otherwise, unless you’re on a paid space upgrade, after 48 hours of inactivity the space will be shut off and you will lose all the data. To avoid losing data, it is highly recommended to use the persistent storage layer offered by HF.</span>
 
@@ -32,9 +35,11 @@ ARGILLA_ENABLE_TELEMETRY=0
 ```
 
 You can easily get your space's credentials by clicking the "Import from Python" button on the top-right corner:
-<img src="./img/import_from_python_snippet.png" alt="create_space" width="300">
+<div style="text-align: center;">
+    <img src="./img/import_from_python_snippet.png" alt="create_space" width="600">
+</div>
 
-**Note:** There are some useful environment variables [here](https://docs.argilla.io/v2.0/reference/argilla-server/configuration/#environment-variables).
+**Note:** You can find some useful environment variables [here](https://docs.argilla.io/v2.0/reference/argilla-server/configuration/#environment-variables).
 
 ### Create dataset
 You need to format your data (responses from different LLMs) as follows:
@@ -82,7 +87,7 @@ Each experiment (a.k.a annotation task) should have a separate config file.
 
 ### Upload dataset to HF Hub
 
-```python
+```bash
 python upload_dataset.py ./configs/experiment_1.yaml
 ```
 
@@ -92,7 +97,7 @@ HuggingFace users can start annotating instances after logging in with their cre
 
 ### Collect results
 
-```python
+```bash
 python upload_dataset.py ./configs/experiment_1.yaml
 ```
 
@@ -112,4 +117,4 @@ This will create a new json file in your `$OUTPUT_DIR`.
 - [Official dockers](https://hub.docker.com/u/argilla)
 
 ## TODO
-- Creation of users (see [Assign records to your annotation team](https://docs.v1.argilla.io/en/latest/tutorials/notebooks/labelling-tokenclassification-basics.html) and [Distribute the annotation task among the team](https://docs.argilla.io/latest/how_to_guides/distribution))
+- Creation of users (see [Assign records to annotation team](https://docs.v1.argilla.io/en/latest/tutorials/notebooks/labelling-tokenclassification-basics.html) and [Distribute annotation task among team](https://docs.argilla.io/latest/how_to_guides/distribution))
