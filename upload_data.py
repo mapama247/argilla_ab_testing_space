@@ -57,7 +57,7 @@ settings = rg.Settings(
     questions=[
         rg.LabelQuestion(
             name="label",
-            title="What is the best response given the prompt?",
+            title="What is the best response to the given prompt?",
             description="Select the one that applies.",
             required=True,
             labels={"answer_a": "Answer A", "answer_b": "Answer B", "both": "Both", "none": "None"}
@@ -67,13 +67,13 @@ settings = rg.Settings(
                 name="rating",
                 values=[1, 2, 3, 4, 5],
                 title="How much better is the chosen response with respect to the rejected one?",
-                description="1 = very unsatisfied, 5 = very satisfied",
+                description="1 = Slightly better, 5 = Much better",
                 required=True,
         ),
         rg.TextQuestion(
             name="text",
-            title="Copy and modify the response here if there is anything you would like to modify.",
-            description="If there is anything you would modify in the response copy and edit the response in this field.",
+            title="Comments",
+            description="In case there is something you would like to comment.",
             use_markdown=True,
             required=False
         )
