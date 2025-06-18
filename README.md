@@ -96,6 +96,10 @@ python collect_annotations.py ./configs/experiment_1.yaml
 This will create a new json file in your `$OUTPUT_DIR`.
 
 ## Resources
+
+<details>
+<summary>Click to expand</summary>
+
 - [How-to guides (very useful!)](https://docs.argilla.io/latest/how_to_guides)
 - [Quickstart Guide](https://docs.argilla.io/latest/getting_started/quickstart/#export-your-dataset-to-the-hub)
 - [Create a Feedback Dataset](https://docs.v1.argilla.io/en/v1.10.0/guides/llms/practical_guides/create_dataset.html)
@@ -109,6 +113,8 @@ This will create a new json file in your `$OUTPUT_DIR`.
 - [HF Documentation about Argilla](https://huggingface.co/docs/hub/en/datasets-argilla)
 - [Official YouTube channel with tutorials](https://www.youtube.com/@argilla-io/videos)
 - [Official dockers](https://hub.docker.com/u/argilla)
+
+</details>
 
 ## TODO
 - Creation of users (see [Assign records to annotation team](https://docs.v1.argilla.io/en/latest/tutorials/notebooks/labelling-tokenclassification-basics.html) and [Distribute annotation task among team](https://docs.argilla.io/latest/how_to_guides/distribution))
