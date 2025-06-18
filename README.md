@@ -90,7 +90,7 @@ HuggingFace users can start annotating instances after logging in with their cre
 ### Collect results
 
 ```bash
-python upload_dataset.py ./configs/experiment_1.yaml
+python collect_annotations.py ./configs/experiment_1.yaml
 ```
 
 This will create a new json file in your `$OUTPUT_DIR`.
