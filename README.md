@@ -6,11 +6,6 @@
 
 Deploy Argilla on Hugginface's Spaces following [these steps](https://docs.v1.argilla.io/en/v1.19.0/getting_started/installation/deployments/huggingface-spaces.html).
 
-<p align="center">
-	<img src="./img/new_space.png" alt="create_space" width="400">
-</p>
-
-
 > <span style="color:red;">**Warning:** HuggingFace Spaces now have persistent storage and this is supported from Argilla 1.11.0 onwards, but you will need to manually activate it via the HuggingFace Spaces settings. Otherwise, unless you’re on a paid space upgrade, after 48 hours of inactivity the space will be shut off and you will lose all the data. To avoid losing data, it is highly recommended to use the persistent storage layer offered by HF.</span>
 
 ### Clone this repository
@@ -30,14 +25,11 @@ pip install -r requirements.txt
 Create a `.env` file with, at least, two environment variables: `API_URL` and `API_KEY`.
 ```bash
 API_URL=https://mapama247-argilla-test.hf.space
-API_KEY=s_wtL8r9tqb3ZsNZz89PqLBkrVotbyymiQx5Wo9H3rjJRzBkUrC42F9SRFdwKhGOak4Le3HeGpbdt1WEu-mOoNieCeUSKTJbXCP2vhLYaV4
+API_KEY=s_wtL8r9tqb3ZsNZz89PqLBkrVotbyymiQx...
 ARGILLA_ENABLE_TELEMETRY=0
 ```
 
-You can easily get your space's credentials by clicking the "Import from Python" button on the top-right corner:
-<p align="center">
-    <img src="./img/import_from_python_snippet.png" alt="create_space" width="600">
-</p>
+You can easily get your space's credentials by clicking the "Import from Python" button on the top-right corner.
 
 **Note:** You can find some useful environment variables [here](https://docs.argilla.io/v2.0/reference/argilla-server/configuration/#environment-variables).
 
