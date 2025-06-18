@@ -80,7 +80,7 @@ Each experiment (a.k.a annotation task) should have a separate config file.
 ### Upload dataset to HF Hub
 
 ```bash
-python upload_dataset.py ./configs/experiment_1.yaml
+python upload_data.py ./configs/experiment_1.yaml
 ```
 
 ### Annotate data
