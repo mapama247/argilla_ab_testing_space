@@ -98,6 +98,7 @@ This will create a new json file in your `$OUTPUT_DIR`.
 ## Resources
 - [How-to guides (very useful!)](https://docs.argilla.io/latest/how_to_guides)
 - [Quickstart Guide](https://docs.argilla.io/latest/getting_started/quickstart/#export-your-dataset-to-the-hub)
+- [Create a Feedback Dataset](https://docs.v1.argilla.io/en/v1.10.0/guides/llms/practical_guides/create_dataset.html)
 - [Blogpost: Launching Argilla on HF Spaces](https://argilla.io/blog/launching-argilla-huggingface-hub/)
 - [HuggingFace Spaces](https://docs.v1.argilla.io/en/v1.19.0/getting_started/installation/deployments/huggingface-spaces.html)
 - [HF Space Settings](https://docs.argilla.io/latest/getting_started/how-to-configure-argilla-on-huggingface/)
@@ -106,6 +107,7 @@ This will create a new json file in your `$OUTPUT_DIR`.
 - [Dev Mode for Pro Accounts](https://huggingface.co/dev-mode-explorers)
 - [Open-Source AI Cookbook](https://huggingface.co/learn/cookbook/en/enterprise_cookbook_argilla)
 - [HF Documentation about Argilla](https://huggingface.co/docs/hub/en/datasets-argilla)
+- [Official YouTube channel with tutorials](https://www.youtube.com/@argilla-io/videos)
 - [Official dockers](https://hub.docker.com/u/argilla)
 
 ## TODO
