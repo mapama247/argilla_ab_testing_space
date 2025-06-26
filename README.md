@@ -83,6 +83,8 @@ Each experiment (a.k.a annotation task) should have a separate config file.
 python upload_data.py ./configs/experiment_1.yaml
 ```
 
+**Note:** If the space is hosted in an Organization rather than a personal account, you might need to change its visibility to `public` in order to upload a new dataset.
+
 ### Annotate data
 
 HuggingFace users can start annotating instances after logging in with their credentials.
