@@ -13,12 +13,12 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def generate_output_path(results_file_path):
+def generate_output_path(results_file_path, new_extension="png"):
     """Generate output path for PNG file based on the results JSON file path."""
     directory = os.path.dirname(results_file_path)
     filename = os.path.basename(results_file_path)
     name, ext = os.path.splitext(filename)
-    output_path = os.path.join(directory, f"{name}.png")
+    output_path = os.path.join(directory, f"{name}.{new_extension}")
     return output_path
 
 def load_and_process_data(file_path):
@@ -270,6 +270,163 @@ def create_visualizations(df, majority_df, agreement_df, kappa_df, out_plot_path
     plt.savefig(out_plot_path, dpi=300, bbox_inches='tight')
     plt.show()
 
+def create_disagreement_table(df, majority_df, output_path_base):
+    """
+    Create a detailed table of samples with less than 100% agreement for manual inspection.
+    
+    Args:
+        df: DataFrame with individual annotations
+        majority_df: DataFrame with majority vote results
+        output_path_base: Base path for output files (without extension)
+    
+    Returns:
+        pd.DataFrame: Table with disagreement cases
+    """
+    # Get items with less than 100% agreement
+    disagreement_items = majority_df[majority_df['agreement_ratio'] < 1.0]['id'].tolist()
+    
+    if not disagreement_items:
+        print("🎉 All items have 100% agreement!")
+        return pd.DataFrame()
+    
+    disagreement_data = []
+    
+    for item_id in disagreement_items:
+        # Get all annotations for this item
+        item_annotations = df[df['id'] == item_id].copy()
+        
+        # Get the first row for basic item info
+        first_row = item_annotations.iloc[0]
+        
+        # Get all responses and users
+        responses = item_annotations['response'].tolist()
+        users = item_annotations['user'].tolist()
+        
+        # Get majority vote info
+        majority_info = majority_df[majority_df['id'] == item_id].iloc[0]
+        
+        # Count each response type
+        response_counts = item_annotations['response'].value_counts().to_dict()
+        
+        # Create response summary string
+        response_summary = []
+        for resp_type in ['answer_a', 'answer_b', 'both', 'none']:
+            count = response_counts.get(resp_type, 0)
+            if count > 0:
+                response_summary.append(f"{resp_type}: {count}")
+        response_summary_str = " | ".join(response_summary)
+        
+        # Create individual responses string
+        individual_responses = []
+        for i, (user, response) in enumerate(zip(users, responses)):
+            individual_responses.append(f"Ann{i+1}: {response}")
+        individual_responses_str = " | ".join(individual_responses)
+        
+        disagreement_data.append({
+            'id': item_id,
+            'prompt': first_row['prompt'],
+            'answer_a': first_row['answer_a'],
+            'answer_b': first_row['answer_b'],
+            'model_a': first_row['model_A'],
+            'model_b': first_row['model_B'],
+            'language': first_row['lang'],
+            'majority_vote': majority_info['majority_vote'],
+            'agreement_ratio': f"{majority_info['agreement_ratio']:.1%}",
+            'response_counts': response_summary_str,
+            'individual_responses': individual_responses_str,
+            'num_annotators': majority_info['total_annotations'],
+            'is_tie': majority_info['is_tie']
+        })
+    
+    disagreement_df = pd.DataFrame(disagreement_data)
+    
+    # Sort by agreement ratio (lowest first) and then by number of annotators
+    disagreement_df = disagreement_df.sort_values(['agreement_ratio', 'num_annotators'])
+    
+    # Save to CSV for easy inspection
+    csv_path = output_path_base.replace('.png', '_disagreements.csv')
+    disagreement_df.to_csv(csv_path, index=False, encoding='utf-8')
+    
+    # Also save a more readable HTML version
+    html_path = output_path_base.replace('.png', '_disagreements.html')
+    
+    # Create HTML with better formatting
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Disagreement Cases - Manual Inspection</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 20px; }}
+            table {{ border-collapse: collapse; width: 100%; margin-bottom: 20px; }}
+            th, td {{ border: 1px solid #ddd; padding: 12px; text-align: left; }}
+            th {{ background-color: #f2f2f2; font-weight: bold; }}
+            tr:nth-child(even) {{ background-color: #f9f9f9; }}
+            .prompt {{ max-width: 300px; word-wrap: break-word; }}
+            .answer {{ max-width: 400px; word-wrap: break-word; }}
+            .disagreement {{ background-color: #ffe6e6; }}
+            .tie {{ background-color: #fff3cd; }}
+            h1 {{ color: #333; }}
+            .summary {{ background-color: #e9f4ff; padding: 15px; margin-bottom: 20px; border-radius: 5px; }}
+        </style>
+    </head>
+    <body>
+        <h1>Manual Inspection: Cases with Disagreement</h1>
+        <div class="summary">
+            <strong>Summary:</strong> {len(disagreement_df)} items with less than 100% agreement out of {len(majority_df)} total items 
+            ({len(disagreement_df)/len(majority_df)*100:.1f}% disagreement rate)
+        </div>
+    """
+    
+    # Add table
+    html_content += "<table>"
+    html_content += "<tr>"
+    for col in ['ID', 'Prompt', 'Model A Answer', 'Model B Answer', 'Models', 'Language', 
+                'Majority Vote', 'Agreement', 'Response Counts', 'Individual Responses']:
+        html_content += f"<th>{col}</th>"
+    html_content += "</tr>"
+    
+    for _, row in disagreement_df.iterrows():
+        row_class = "tie" if row['is_tie'] else "disagreement"
+        html_content += f'<tr class="{row_class}">'
+        html_content += f'<td>{row["id"]}</td>'
+        html_content += f'<td class="prompt">{row["prompt"]}</td>'
+        html_content += f'<td class="answer">{row["answer_a"]}</td>'
+        html_content += f'<td class="answer">{row["answer_b"]}</td>'
+        html_content += f'<td><strong>A:</strong> {row["model_a"]}<br><strong>B:</strong> {row["model_b"]}</td>'
+        html_content += f'<td>{row["language"]}</td>'
+        html_content += f'<td><strong>{row["majority_vote"]}</strong></td>'
+        html_content += f'<td>{row["agreement_ratio"]}</td>'
+        html_content += f'<td>{row["response_counts"]}</td>'
+        html_content += f'<td>{row["individual_responses"]}</td>'
+        html_content += '</tr>'
+    
+    html_content += """
+        </table>
+        <div class="summary">
+            <strong>Legend:</strong><br>
+            • <span style="background-color: #ffe6e6; padding: 2px 5px;">Red rows</span>: Clear majority but with disagreement<br>
+            • <span style="background-color: #fff3cd; padding: 2px 5px;">Yellow rows</span>: Tied votes (no clear majority)<br>
+            • Agreement %: Percentage of annotators who agreed with the majority vote
+        </div>
+    </body>
+    </html>
+    """
+    
+    with open(html_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    print(f"\n📋 DISAGREEMENT ANALYSIS:")
+    print(f"   • Items with disagreement: {len(disagreement_df)} out of {len(majority_df)} ({len(disagreement_df)/len(majority_df)*100:.1f}%)")
+    print(f"   • Disagreement table saved as: {csv_path}")
+    print(f"   • HTML report saved as: {html_path}")
+    
+    if len(disagreement_df) > 0:
+        print(f"   • Worst agreement: {disagreement_df['agreement_ratio'].iloc[0]}")
+        print(f"   • Items with ties: {disagreement_df['is_tie'].sum()}")
+    
+    return disagreement_df
+
 def print_summary_statistics(df, majority_df, agreement_df, kappa_df):
     """Print summary statistics."""
     print("="*60)
@@ -359,6 +516,10 @@ def main():
         # Create visualizations
         print("Creating visualizations...")
         create_visualizations(df, majority_df, agreement_df, kappa_df, out_plot_path)
+
+        # Create disagreement table for manual inspection
+        print("Creating disagreement analysis...")
+        disagreement_df = create_disagreement_table(df, majority_df, out_plot_path)
         
         # Print summary statistics
         print_summary_statistics(df, majority_df, agreement_df, kappa_df)
